@@ -78,8 +78,8 @@ class Exec(object):
 
         assertion.success(
             result,
-            "Error running [{}] {}. See debug log.".
-            format(pushd.Dir.getcwd(), cmd))
+            "Error running [{}] {}.\n{}".
+            format(pushd.Dir.getcwd(), cmd, stderr))
 
         return stdout, stderr
 

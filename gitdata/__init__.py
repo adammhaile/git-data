@@ -23,6 +23,29 @@ class GitDataPathException(GitDataException):
     pass
 
 
+class DataObj(object):
+    def __init__(self, key, path, data):
+        self.key = key
+        self.path = path
+        self.data = data
+
+    def __repr__(self):
+        result = {
+            'key': self.key,
+            'path': self.path,
+            'data': self.data
+        }
+        return str(result)
+
+    def reload(self):
+        with open(self.path, 'r') as f:
+            self.data = yaml.load(f)
+
+    def save(self):
+        with open(self.path, 'w') as f:
+            yaml.safe_dump(self.data, f, default_flow_style=False)
+
+
 class GitData(object):
     def __init__(self, data_path=None, clone_dir='./', branch='master',
                  sub_dir=None, exts=['yaml', 'yml', 'json'], logger=None):
@@ -135,7 +158,7 @@ class GitData(object):
                     with open(data_file, 'r') as f:
                         data = yaml.load(f)
                         if key:
-                            return data
+                            return DataObj(key, data_file, data)
                         else:
                             use = True
                             if filter_funcs:
@@ -145,6 +168,24 @@ class GitData(object):
                                         break
                             if use:
                                 k = name.replace(ext, '')
-                                result[k] = data
+                                result[k] = DataObj(k, data_file, data)
 
         return result
+
+    def commit(self, msg):
+        """
+        Commit outstanding data changes
+        """
+        self.logger.info('Commit config: {}'.format(msg))
+        with Dir(self.data_path):
+            self.cmd.check_assert('git add .')
+            self.cmd.check_assert('git commit --allow-empty -m "{}"'.format(msg))
+
+    def push(self):
+        """
+        Push changes back to data repo.
+        Will of course fail if user does not have write access.
+        """
+        self.logger.info('Pushing config...')
+        with Dir(self.data_path):
+            self.cmd.check_assert('git push')
