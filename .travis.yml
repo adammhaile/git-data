@@ -1,0 +1,17 @@
+language: python
+python:
+- '2.7'
+deploy:
+  - provider: pypi
+    skip_cleanup: true
+    user: adammhaile
+    password:
+      secure: RHtgu4bLDj1KZHbD5GZNb7NOnlrjUB+59XT2Tas49rebfpeHrwzAfMpbeUlWbDwuArmB3s7/LrMiN1w2rwdiq3td6bl80HqGjDyjaOUp8YRo4t6V4JLrXOjEytb91NpG+ImDdnAob4ZFo0jb5WGf87QDOl3sAbni6MyC2YjGuCH0CAi1HXCUrZU37hi6wtBo1MiHc5AA0FjCVFi73Wfd1xjk32+ivimSkX2ccb0KiInP4fIM7MWY6nCHLoWUOOpUmZ7LCv8VeVtYz0fWg4VyWaTlVTP3KESi7BU+mCNY3qz8YREWAdUDbVJdCZ4mnl1Ssz8jkDPqzvOtCsbuY8h0MjGiuEXjSqwR/l0nDvYUUnS5RVv6PNb+C/95/26XBJi4IaTfRjyDFn1NSMeNrKO6JqehhnahXMf3brgNcAIDam4xblxAbGGhqEm3SGFhVPdFPPiOfQPxhVp+HvjFyy1pOQPVzVOk9Ki6z++7wkGXpkHOqohcRHamL4//MqWehqF4CWdycOHuOZ39knmJdOvu3L/yblydn+fzfDoEytHElb5TrWXY0P9qVMHDpwjiVs/Tr2THrGc5Qg7Yk88ITuh4z52Yhs/bjvO4ts+HNi9lh7DxDJvIT7Sh9QkWsLc5H5leNWazshtU0YmV7uARHhMwHDSViqSWIKIy+q+2hKp1U/Q=
+
+    on:
+      repo: adammhaile/gitdata
+      python: 2.7
+      tags: true
+
+script:
+  - python setup.py install
