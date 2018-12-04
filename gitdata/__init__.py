@@ -158,7 +158,7 @@ class GitData(object):
         if not os.path.isdir(self.data_dir):
             raise GitDataPathException('{} is not a valid sub-directory in the data'.format(self.sub_dir))
 
-    def load_data(self, path='', key=None, keys=None, exclude=None, filter_funcs=None):
+    def load_data(self, path='', key=None, keys=None, exclude=None, filter_funcs=None, replace_vars={}):
         full_path = os.path.join(self.data_dir, path.replace('\\', '/'))
         if path and not os.path.isdir(full_path):
             raise GitDataPathException('Cannot find "{}" under "{}"'.format(path, self.data_dir))
@@ -196,7 +196,12 @@ class GitData(object):
                 data_file = os.path.join(full_path, name)
                 if os.path.isfile(data_file):
                     with open(data_file, 'r') as f:
-                        data = yaml.load(f)
+                        raw_text = f.read()
+                        try:
+                            raw_text = raw_text.format(**replace_vars)
+                        except KeyError as e:
+                            self.logger.warning('{} contains template key `{}` but no value was provided'.format(data_file, e.args[0]))
+                        data = yaml.load(raw_text)
                         use = True
                         if exclude and base_name in exclude:
                             use = False
