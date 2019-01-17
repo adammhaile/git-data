@@ -197,10 +197,11 @@ class GitData(object):
                 if os.path.isfile(data_file):
                     with open(data_file, 'r') as f:
                         raw_text = f.read()
-                        try:
-                            raw_text = raw_text.format(**replace_vars)
-                        except KeyError as e:
-                            self.logger.warning('{} contains template key `{}` but no value was provided'.format(data_file, e.args[0]))
+                        if replace_vars:
+                            try:
+                                raw_text = raw_text.format(**replace_vars)
+                            except KeyError as e:
+                                self.logger.warning('{} contains template key `{}` but no value was provided'.format(data_file, e.args[0]))
                         data = yaml.load(raw_text)
                         use = True
                         if exclude and base_name in exclude:
