@@ -41,7 +41,7 @@ class DataObj(object):
 
     def reload(self):
         with open(self.path, 'r') as f:
-            self.data = yaml.load(f)
+            self.data = yaml.full_load(f)
 
     def save(self):
         with open(self.path, 'w') as f:
@@ -202,7 +202,7 @@ class GitData(object):
                                 raw_text = raw_text.format(**replace_vars)
                             except KeyError as e:
                                 self.logger.warning('{} contains template key `{}` but no value was provided'.format(data_file, e.args[0]))
-                        data = yaml.load(raw_text)
+                        data = yaml.full_load(raw_text)
                         use = True
                         if exclude and base_name in exclude:
                             use = False

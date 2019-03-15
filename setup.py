@@ -8,7 +8,7 @@ with open('./requirements.txt') as f:
 
 setup(
     name="pygitdata",
-    version="0.2.1",
+    version="0.2.2",
     description="Simple module to pull structured data from git",
     long_description=open('README.md').read(),
     url="https://github.com/adammhaile/gitdata",
